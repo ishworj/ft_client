@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { GrMoney } from "react-icons/gr";
 const financialTips = [
   {
     tip: "Build an emergency fund.",
@@ -61,15 +62,24 @@ const financialTips = [
 const FinincalTips = () => {
   const [showQuote, setShowQuote] = useState(financialTips[0]);
 
-  useEffect(()=>{
-    setInterval(()=>{
-        setShowQuote(financialTips[Math.floor(Math.random() * financialTips.length)])
-    },3000)
-  },[])
+  useEffect(() => {
+    setInterval(() => {
+      setShowQuote(
+        financialTips[Math.floor(Math.random() * financialTips.length)]
+      );
+    }, 3000);
+  }, []);
 
   const { tip, quote, expert } = showQuote;
   return (
-    <div className="d-flex flex-column justify-content-center" style={{height:"100%"}}>
+    <div
+      className="d-flex flex-column justify-content-center gap-3 "
+      style={{ height: "100%" }}
+    >
+      <div>
+        <GrMoney className="text-success " style={{fontSize:'10rem'}}/>
+      </div>
+      <div>Watch your Money grow </div>
       <h4>{tip}</h4>
       <div className="fw-bolder">
         " {quote} " - {expert}
