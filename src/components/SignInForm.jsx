@@ -1,12 +1,27 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import CustomInput from "./CustomInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
-import { postNewUser } from "../../helpers/axiosHelper";
-
+import { loginUser, postNewUser } from "../../helpers/axiosHelper";
+import { useUser } from "../context/UserContext";
+import { useLocation, useNavigate } from "react-router-dom";
+const initialState = {
+  email: "",
+  password: "",
+};
 const SignInForm = () => {
-  const [form, setForm] = useState({});
+  const location = useLocation();
+  const navigate = useNavigate()
+  const { user, setUser } = useUser();
+  const [form, setForm] = useState(initialState);
+
+  const goTO = location?.state?.from?.pathname || "/dashboard";
+
+  useEffect(()=>{
+    user?._id && navigate(goTO)
+  },[user?._id, navigate])
+
   const fields = [
     {
       label: "Email",
@@ -21,7 +36,7 @@ const SignInForm = () => {
       required: true,
       type: "password",
       name: "password",
-    }
+    },
   ];
 
   const handleOnChange = (e) => {
@@ -34,7 +49,16 @@ const SignInForm = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    const pendingRequest = loginUser(form);
+
+    toast.promise(pendingRequest, {
+      pending: "please wait ....",
+    });
+    const { status, message, user, accessJWT } = await pendingRequest;
+
+    toast[status](message);
+    setUser(user);
+    localStorage.setItem("accessJWT",accessJWT);
   };
   return (
     <div className="border rounded p-4">

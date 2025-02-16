@@ -1,6 +1,5 @@
 import axios from "axios";
-// const rootApiEp = import.meta.env.VITE_APP_ROOT_API + "/api/v1";
-const rootApiEp = "http://localhost:8080/api/v1";
+const rootApiEp = import.meta.env.VITE_ROOT_API + "/api/v1";
 const getAccessJWT = () => {
   return localStorage.getItem("accessJWT");
 };
@@ -20,7 +19,7 @@ const apiProcessor = async ({ method, url, data, headers }) => {
 
     return {
       status: "error",
-      message: error?.response?.data?.error || error.message,
+      message: error?.response?.data?.message || error.message,
     };
   }
 };

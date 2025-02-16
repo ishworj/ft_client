@@ -1,9 +1,24 @@
-.wrapper{
-    min-height: 100vh;
-    background:black;
-    color: rgb(221, 221, 221);
+.wrapper {
+  min-height: 100vh;
+  background: black;
+  color: rgb(221, 221, 221);
 }
 
-.main{
-    min-height:calc(100vh - 150px)
+.main {
+  min-height: calc(100vh - 150px);
+}
+
+.table,
+tr,
+td,
+th {
+  background: transparent !important;
+  color: white !important;
+}
+
+.in {
+  color: greenyellow !important;
+}
+.out {
+  color: red !important;
 }

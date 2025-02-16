@@ -12,6 +12,8 @@ const initialState = {
   confirmPassword: "",
 };
 const SignUpForm = () => {
+  const { form, setForm, handleOnChange } = useForm(initialState);
+
   const fields = [
     {
       label: "Name",
@@ -19,6 +21,7 @@ const SignUpForm = () => {
       required: true,
       type: "text",
       name: "name",
+      value: form.name,
     },
     {
       label: "Email",
@@ -26,6 +29,7 @@ const SignUpForm = () => {
       required: true,
       type: "email",
       name: "email",
+      value: form.email,
     },
     {
       label: "Password",
@@ -33,6 +37,7 @@ const SignUpForm = () => {
       required: true,
       type: "password",
       name: "password",
+      value: form.password,
     },
     {
       label: "Confirm Password",
@@ -40,9 +45,9 @@ const SignUpForm = () => {
       required: true,
       type: "password",
       name: "confirmPassword",
+      value: form.confirmPassword,
     },
   ];
-  const { form, setForm, handleOnChange } = useForm(initialState);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -51,8 +56,11 @@ const SignUpForm = () => {
     if (confirmPassword != rest.password) {
       return toast.error("password do not match");
     }
-
-    const { status, message } = await postNewUser(rest);
+    const pending = postNewUser(rest);
+    toast.promise(pending,{
+      pending:"please wait"
+    })
+    const { status, message } = await pending;
 
     toast[status](message);
 
