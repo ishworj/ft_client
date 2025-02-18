@@ -12,6 +12,11 @@ const TransactionTable = () => {
   const { transactions, toogleModal, getTransactions } = useUser();
   const [idsToDelete, setIdsToDelete] = useState([]);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // You can change this to any number you like
+  const totalPages = Math.ceil(displayTran.length / itemsPerPage);
+
   useEffect(() => {
     setDisplayTran(transactions);
   }, [transactions]);
@@ -22,26 +27,52 @@ const TransactionTable = () => {
 
   const handleOnSearch = (e) => {
     const { value } = e.target;
-    const filtredArg = transactions.filter(({ description }) => {
+    const filteredTransactions = transactions.filter(({ description }) => {
       return description.toLowerCase().includes(value.toLowerCase());
     });
-    setDisplayTran(filtredArg);
+    setDisplayTran(filteredTransactions);
   };
+
+  // const handleOnSelect = (e) => {
+  //   const { checked, value } = e.target;
+
+  //   if (value === "all") {
+  //     checked
+  //       ? setIdsToDelete(displayTran.map((item) => item._id))
+  //       : setIdsToDelete([]);
+  //     return;
+  //   }
+
+  //   if (checked) {
+  //     setIdsToDelete([...idsToDelete, value]);
+  //   } else {
+  //     setIdsToDelete(idsToDelete.filter((id) => id !== value));
+  //   }
+  // };
 
   const handleOnSelect = (e) => {
     const { checked, value } = e.target;
 
     if (value === "all") {
-      checked
-        ? setIdsToDelete(displayTran.map((item) => item._id))
-        : setIdsToDelete([]);
+      if (checked) {
+        const newIds = new Set([
+          ...idsToDelete,
+          ...currentTransactions.map((t) => t._id),
+        ]);
+        setIdsToDelete([...newIds]);
+      } else {
+        const newIds = idsToDelete.filter(
+          (id) => !currentTransactions.some((t) => t._id === id)
+        );
+        setIdsToDelete(newIds);
+      }
       return;
     }
 
     if (checked) {
-      setIdsToDelete([...idsToDelete, value]);
+      setIdsToDelete((prev) => [...prev, value]);
     } else {
-      setIdsToDelete(idsToDelete.filter((id) => id != value));
+      setIdsToDelete((prev) => prev.filter((id) => id !== value));
     }
   };
 
@@ -58,10 +89,25 @@ const TransactionTable = () => {
       status === "success" && getTransactions() && setIdsToDelete([]);
     }
   };
+
+  // Pagination logic: slice the transactions based on the current page
+  const indexOfLastTransaction = currentPage * itemsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
+  const currentTransactions = displayTran.slice(
+    indexOfFirstTransaction,
+    indexOfLastTransaction
+  );
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <>
       <div className="d-flex justify-content-between pt-3 mb-4">
-        <div> {displayTran.length}transaction's found!</div>
+        <div className="text-white ">
+          {" "}
+          <h2 className="text-primary fs-1">{displayTran.length}</h2> transaction's found!
+        </div>
         <div>
           <Form.Control
             placeholder="Search transactions..."
@@ -76,12 +122,15 @@ const TransactionTable = () => {
         </div>
       </div>
       <div>
-        {displayTran.length > 0 && (
+        {currentTransactions.length > 0 && (
           <Form.Check
             label="Select all"
             value="all"
             onChange={handleOnSelect}
-            checked={displayTran.length  === idsToDelete.length }
+            checked={
+              currentTransactions.length > 0 &&
+              currentTransactions.every((t) => idsToDelete.includes(t._id))
+            }
           />
         )}
       </div>
@@ -97,34 +146,32 @@ const TransactionTable = () => {
           </tr>
         </thead>
         <tbody>
-          {displayTran.length > 0 &&
-            displayTran.map((t, i) => (
-              <tr key={t._id}>
-                <td>{i + 1}</td>
-                <td>
-                  {" "}
-                  <Form.Check
-                    label={t.date.slice(0, 10)}
-                    value={t._id}
-                    onChange={handleOnSelect}
-                    checked={idsToDelete.includes(t._id)}
-                  />
-                </td>
-                <td>{t.description}</td>
-                {t.type === "Income" && (
-                  <>
-                    <td className="in">${t.amount}</td>
-                    <td></td>
-                  </>
-                )}
-                {t.type === "Expense" && (
-                  <>
-                    <td></td>
-                    <td className="out">-${t.amount}</td>
-                  </>
-                )}
-              </tr>
-            ))}
+          {currentTransactions.map((t, i) => (
+            <tr key={t._id}>
+              <td>{i + 1}</td>
+              <td>
+                <Form.Check
+                  label={t.date.slice(0, 10)}
+                  value={t._id}
+                  onChange={handleOnSelect}
+                  checked={idsToDelete.includes(t._id)}
+                />
+              </td>
+              <td>{t.description}</td>
+              {t.type === "Income" && (
+                <>
+                  <td className="in">${t.amount}</td>
+                  <td></td>
+                </>
+              )}
+              {t.type === "Expense" && (
+                <>
+                  <td></td>
+                  <td className="out">-${t.amount}</td>
+                </>
+              )}
+            </tr>
+          ))}
           <tr className="fw-bold text-center">
             <td colSpan={3}>Total balance</td>
             <td
@@ -144,6 +191,25 @@ const TransactionTable = () => {
           </Button>
         </div>
       )}
+
+      {/* Pagination controls */}
+      <div className="pagination d-flex justify-content-center pt-3">
+        <Button
+          disabled={currentPage === 1}
+          onClick={() => paginate(currentPage - 1)}
+        >
+          Previous
+        </Button>
+        <span className="mx-3">
+          Page {currentPage} of {totalPages}
+        </span>
+        <Button
+          disabled={currentPage === totalPages}
+          onClick={() => paginate(currentPage + 1)}
+        >
+          Next
+        </Button>
+      </div>
     </>
   );
 };

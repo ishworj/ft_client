@@ -10,6 +10,8 @@ import Auth from "./auth/Auth.jsx";
 import { useEffect } from "react";
 import { useUser } from "./context/UserContext.jsx";
 import { autoLogin } from "./utils/users.js";
+import Contact from "./pages/Contact.jsx";
+import Home from "./pages/Home.jsx";
 
 function App() {
   const { user, setUser } = useUser();
@@ -25,8 +27,10 @@ function App() {
     <div className="wrapper">
       <Routes>
         <Route path="/" element={<DefaultLayout />}>
-          <Route index element={<Login />}></Route>
+          <Route path="login" element={<Login />}></Route>
           <Route path="signup" element={<Signup />}></Route>
+          <Route path="contact" element={<Contact />}></Route>
+          <Route index element={<Home/>}></Route>
           <Route
             path="dashboard"
             element={

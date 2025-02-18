@@ -13,8 +13,8 @@ export const CustomModal = ({ children }) => {
       keyboard={false}
       centered
     >
-      <Modal.Header closeButton></Modal.Header>
-      <Modal.Body>{children}</Modal.Body>
+      <Modal.Header closeButton >Note!</Modal.Header>
+      <Modal.Body className="p-5 ">{children}</Modal.Body>
     </Modal>
   );
 };

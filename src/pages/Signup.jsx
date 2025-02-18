@@ -6,12 +6,14 @@ import SignUpForm from "../components/SignUpForm";
 
 const Signup = () => {
   return (
-    <Container className="p-5">
-      <Row className="bg-dark p-5 rounded ">
-        <Col md={6}>
+    <Container className="p-3">
+      <Row
+        className=" p-5  rounded"
+      >
+        <Col md={6} style={{ backgroundColor: "black" }}>
           <FinincalTips />
         </Col>
-        <Col md={6}>
+        <Col md={6} style={{ backgroundColor: "black" }}>
           <SignUpForm />
         </Col>
       </Row>

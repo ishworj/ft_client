@@ -14,15 +14,24 @@ const Login = () => {
           <SignInForm />
         </Col>
         <Col md={6}>
-          <div
-            className="d-flex flex-column justify-content-center gap-3 fs-1 "
-            style={{ height: "100%" }}
-          >
-            <div className="text-danger text-decoration-line-through">
+          <div className="d-flex flex-column justify-content-center align-items-center ">
+            <div className="d-flex  justify-content-center">
+              <img
+                className="pulse"
+                src="/increase.png"
+                style={{
+                  objectFit: "contain",
+                  maxHeight: "50%",
+                  maxWidth: "80%",
+                }}
+                alt=""
+              />
+            </div>
+            <div className="text-danger text-decoration-line-through fs-4">
               <FaArrowTrendDown />
               Reduce your expenses
             </div>
-            <div className="text-success">
+            <div className="text-success fs-2">
               <FaArrowUpShortWide />
               Increase your income by tracking
             </div>

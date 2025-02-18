@@ -5,22 +5,22 @@ import { useEffect, useState } from "react";
 import { toast, Bounce } from "react-toastify";
 import { loginUser, postNewUser } from "../../helpers/axiosHelper";
 import { useUser } from "../context/UserContext";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 const initialState = {
   email: "",
   password: "",
 };
 const SignInForm = () => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { user, setUser } = useUser();
   const [form, setForm] = useState(initialState);
 
-  const goTO = location?.state?.from?.pathname || "/dashboard";
+  const goTO = location?.state?.from?.pathname || "/transaction";
 
-  useEffect(()=>{
-    user?._id && navigate(goTO)
-  },[user?._id, navigate])
+  useEffect(() => {
+    user?._id && navigate(goTO);
+  }, [user?._id, navigate]);
 
   const fields = [
     {
@@ -58,7 +58,7 @@ const SignInForm = () => {
 
     toast[status](message);
     setUser(user);
-    localStorage.setItem("accessJWT",accessJWT);
+    localStorage.setItem("accessJWT", accessJWT);
   };
   return (
     <div className="border rounded p-4">
@@ -71,6 +71,11 @@ const SignInForm = () => {
           <Button variant="primary" type="submit">
             Submit
           </Button>
+        </div>
+        <div className="text-center pt-3">
+          Dont have an account ? 
+          <Link to="/signup">
+          Signup here?</Link>
         </div>
       </Form>
     </div>

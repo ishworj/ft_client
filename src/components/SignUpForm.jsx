@@ -4,6 +4,7 @@ import CustomInput from "./CustomInput";
 import { toast, Bounce } from "react-toastify";
 import { postNewUser } from "../../helpers/axiosHelper";
 import useForm from "../hooks/useForm";
+import { Link } from "react-router-dom";
 
 const initialState = {
   name: "",
@@ -46,7 +47,7 @@ const SignUpForm = () => {
       type: "password",
       name: "confirmPassword",
       value: form.confirmPassword,
-    },
+    }
   ];
 
   const handleOnSubmit = async (e) => {
@@ -67,16 +68,21 @@ const SignUpForm = () => {
     status === "success" && setForm(initialState);
   };
   return (
-    <div className="border rounded p-4">
+    <div className="border rounded p-4 m-2">
       <h4 className="mb-5">Sign up Quickly! </h4>
       <Form onSubmit={handleOnSubmit}>
         {fields.map((input) => (
           <CustomInput key={input.name} {...input} onChange={handleOnChange} />
         ))}
-        <div className="d-grid">
+        <Form.Check label="suscribe to us" />
+        <div className="d-grid mt-2">
           <Button variant="primary" type="submit">
             Submit
           </Button>
+        </div>
+        <div className="">
+        <p>Have an account ?</p>
+        <Link to={"/login"}>Logiin Here</Link>
         </div>
       </Form>
     </div>

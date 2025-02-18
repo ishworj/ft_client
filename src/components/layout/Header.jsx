@@ -1,13 +1,14 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import {  Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { ImExit } from "react-icons/im";
 import { TbLogin } from "react-icons/tb";
 import { IoCreate } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { GrTransaction } from "react-icons/gr";
 import { useUser } from "../../context/UserContext.jsx";
+import { MdContactSupport } from "react-icons/md";
 import { useState } from "react";
 export const Header = () => {
   const { user, setUser } = useUser();
@@ -15,13 +16,36 @@ export const Header = () => {
   function handleOnLogout() {
     localStorage.removeItem("accessJWT");
     setUser({});
-    showMenu(false)
+    showMenu(false);
   }
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("");
+  };
+
   return (
-    <Navbar expand="lg" variant="dark" className="bg-body-dark" expanded={menu}>
-      <Container>
-        <Navbar.Brand href="#home">FT</Navbar.Brand>
-        {user?.name && <div>Welcome {user?.name}</div>}
+    <Navbar
+      expand="lg"
+      variant="dark"
+      aria-haspopup
+      className="bg-body-dark"
+      expanded={menu}
+    >
+      <Container className=" p-3">
+        <Navbar.Brand
+          href="#home"
+          className="d-flex gap-2 align-items-center fs-4"
+        >
+          <img
+            src="/bank.png"
+            height={"60px"}
+            alt="logo"
+            onClick={handleClick}
+          />
+          <div onClick={handleClick}>Expense Tracker</div>
+        </Navbar.Brand>
 
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
@@ -30,33 +54,48 @@ export const Header = () => {
           }}
         />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav className="ms-auto text-light text-center">
             {user?._id ? (
               <>
                 <Link
                   onClick={() => {
                     showMenu(false);
                   }}
-                  className="nav-link"
+                  className="nav-link text-light"
                   to="/dashboard"
                 >
-                  <MdDashboard />
-                  Dashboard
+                  <MdDashboard /> Dashboard
                 </Link>
                 <Link
                   onClick={() => {
                     showMenu(false);
                   }}
-                  className="nav-link"
+                  className="nav-link text-light"
                   to="/transaction"
                 >
                   <GrTransaction />
                   Transaction
                 </Link>
-                <Link onClick={handleOnLogout} className="nav-link" to="/">
-                  <ImExit />
-                  Logout
+                <Link
+                  onClick={() => {
+                    showMenu(false);
+                  }}
+                  className="nav-link text-light"
+                  to="/contact"
+                >
+                  <MdContactSupport />
+                  Contact Us
                 </Link>
+                <div className="d-flex justify-content-center">
+                  <Link
+                    onClick={handleOnLogout}
+                    className="nav-link text-dark bg-warning rounded px-2 "
+                    to="/"
+                  >
+                    <ImExit />
+                    Logout
+                  </Link>
+                </div>
               </>
             ) : (
               <>
@@ -64,22 +103,39 @@ export const Header = () => {
                   onClick={() => {
                     showMenu(false);
                   }}
-                  className="nav-link"
-                  to="/signup"
+                  className="nav-link text-light"
+                  to=""
                 >
-                  <IoCreate />
-                  Sign up
+                  Home
                 </Link>
-
                 <Link
                   onClick={() => {
                     showMenu(false);
                   }}
-                  className="nav-link"
-                  to="/"
+                  className="nav-link text-light"
+                  to="/contact"
+                >
+                  Contact Us
+                </Link>
+                <Link
+                  onClick={() => {
+                    showMenu(false);
+                  }}
+                  className="nav-link text-light"
+                  to="/login"
                 >
                   <TbLogin />
                   Login
+                </Link>
+                <Link
+                  onClick={() => {
+                    showMenu(false);
+                  }}
+                  className="nav-link text-light rounded bg-primary"
+                  to="/signup"
+                >
+                  <IoCreate />
+                  Sign up
                 </Link>
               </>
             )}

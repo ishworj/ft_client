@@ -4,8 +4,13 @@ import { useUser } from "../context/UserContext";
 
 const Auth = ({ children }) => {
   const location = useLocation();
-  const {user}= useUser();
-  return user?._id ? children : <Navigate to="/" replace state={{from:location}} />;
+  console.log(111, location);
+  const { user } = useUser();
+  return user?._id ? (
+    children
+  ) : (
+    <Navigate to="/login" replace state={{ from: location }} />
+  );
 };
 
 export default Auth;

@@ -73,11 +73,12 @@ const FinincalTips = () => {
   const { tip, quote, expert } = showQuote;
   return (
     <div
-      className="d-flex flex-column justify-content-center gap-3 "
+      className="d-flex flex-column justify-content-center gap-3 pb-5"
       style={{ height: "100%" }}
     >
-      <div>
-        <GrMoney className="text-success " style={{fontSize:'10rem'}}/>
+      <div className="rounded">
+        {/* <GrMoney className="text-success " style={{fontSize:'10rem'}}/> */}
+        <img src="/moneygrow.jpg" className="pulse" alt="Money" style={{height:"300px",width:"300px"}} />
       </div>
       <div>Watch your Money grow </div>
       <h4>{tip}</h4>
