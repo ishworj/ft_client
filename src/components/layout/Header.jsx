@@ -33,17 +33,19 @@ export const Header = () => {
       className="bg-body-dark"
       expanded={menu}
     >
-      <Container className=" p-3">
+      <Container className=" p-md-3">
         <Navbar.Brand
           href="#home"
-          className="d-flex gap-2 align-items-center fs-4"
+          className="d-flex gap-2 align-items-center fs-md-4"
         >
           <img
+            className=""
             src="/bank.png"
             height={"60px"}
             alt="logo"
             onClick={handleClick}
           />
+
           <div onClick={handleClick}>Expense Tracker</div>
         </Navbar.Brand>
 

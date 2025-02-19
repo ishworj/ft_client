@@ -11,10 +11,11 @@ const TransactionTable = () => {
   const [displayTran, setDisplayTran] = useState([]);
   const { transactions, toogleModal, getTransactions } = useUser();
   const [idsToDelete, setIdsToDelete] = useState([]);
+  console.log(transactions)
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // You can change this to any number you like
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(displayTran.length / itemsPerPage);
 
   useEffect(() => {
@@ -32,24 +33,7 @@ const TransactionTable = () => {
     });
     setDisplayTran(filteredTransactions);
   };
-
-  // const handleOnSelect = (e) => {
-  //   const { checked, value } = e.target;
-
-  //   if (value === "all") {
-  //     checked
-  //       ? setIdsToDelete(displayTran.map((item) => item._id))
-  //       : setIdsToDelete([]);
-  //     return;
-  //   }
-
-  //   if (checked) {
-  //     setIdsToDelete([...idsToDelete, value]);
-  //   } else {
-  //     setIdsToDelete(idsToDelete.filter((id) => id !== value));
-  //   }
-  // };
-
+  
   const handleOnSelect = (e) => {
     const { checked, value } = e.target;
 
@@ -90,7 +74,7 @@ const TransactionTable = () => {
     }
   };
 
-  // Pagination logic: slice the transactions based on the current page
+  // Pagination logic
   const indexOfLastTransaction = currentPage * itemsPerPage;
   const indexOfFirstTransaction = indexOfLastTransaction - itemsPerPage;
   const currentTransactions = displayTran.slice(
@@ -103,10 +87,12 @@ const TransactionTable = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-between pt-3 mb-4">
+      <div className="d-flex justify-content-around pt-3 mb-4 flex-wrap gap-sm-3 text-center">
         <div className="text-white ">
           {" "}
-          <h2 className="text-primary fs-1">{displayTran.length}</h2> transaction's found!
+          <h4 className="text-primary ">
+            {displayTran.length} transaction's found!
+          </h4>
         </div>
         <div>
           <Form.Control
@@ -135,21 +121,21 @@ const TransactionTable = () => {
         )}
       </div>
 
-      <Table striped hover>
+      <Table className="table table-sm " striped hover>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Deposited</th>
-            <th>Expense</th>
+            <th className="text-warning  py-2 ">#</th>
+            <th className="text-warning  py-2 ">Date</th>
+            <th className="text-warning  py-2 ">Description</th>
+            <th className="text-warning  py-2 ">Deposited</th>
+            <th className="text-warning  py-2 ">Expense</th>
           </tr>
         </thead>
         <tbody>
           {currentTransactions.map((t, i) => (
-            <tr key={t._id}>
-              <td>{i + 1}</td>
-              <td>
+            <tr className="" key={t._id}>
+              <td className="py-2 py-sm-3">{i + 1}</td>
+              <td className="py-2 py-sm-3">
                 <Form.Check
                   label={t.date.slice(0, 10)}
                   value={t._id}

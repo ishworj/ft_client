@@ -18,7 +18,7 @@ const Contact = () => {
   const { form, setForm, handleOnChange } = useForm(initialState);
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    toast.success("your enquiry was submitted , you will get reply soon")
+    toast.success("your enquiry was submitted , you will get reply soon");
     setForm(initialState);
   };
   return (
@@ -97,7 +97,7 @@ const Contact = () => {
           </Form>
         </Col>
       </Row>
-      <Row className="bg-dark p-5 rounded ">
+      <Row className="bg-dark p-md-5 rounded ">
         <Col>
           <h3 className="mb-3">FAQS</h3>
           <Accordion className="bg-dark">

@@ -3,11 +3,11 @@ import { Button, Container, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { Carousel } from "react-bootstrap";
 import { useUser } from "../context/UserContext";
-import Transaction from "./Transaction";
+import Dashboard from "./Dashboard";
 const Home = () => {
   const { user } = useUser();
   return user?._id ? (
-    <Transaction />
+    <Dashboard />
   ) : (
     <Container className="p-5">
       <Row className="bg-dark p-5 rounded mb-5">

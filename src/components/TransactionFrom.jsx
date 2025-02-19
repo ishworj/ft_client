@@ -17,6 +17,8 @@ const TransactionFrom = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+   
     const pending = postNewTransaction(form);
     toast.promise(pending, {
       pending: "please wait",
@@ -47,6 +49,7 @@ const TransactionFrom = () => {
       type: "number",
       name: "amount",
       value: form.amount,
+      min:1
     },
     {
       label: "Transaction Date",

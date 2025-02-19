@@ -13,8 +13,8 @@ const Transaction = () => {
     getTransactions();
   }, []);
   return (
-    <Container className="p-5">
-      <Row className="bg-dark p-5 rounded ">
+    <Container className=" p-md-5">
+      <Row className="bg-dark p-md-5 rounded ">
         <Col>
           <CustomModal>
             <TransactionFrom />

@@ -53,20 +53,41 @@ const SignUpForm = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    const { confirmPassword, ...rest } = form;
-    if (confirmPassword != rest.password) {
-      return toast.error("password do not match");
+    const { confirmPassword, password, ...rest } = form;
+
+    // Ensure password and confirmPassword are included
+    if (!password || !confirmPassword) {
+      return toast.error("Password and confirm password are required");
     }
-    const pending = postNewUser(rest);
-    toast.promise(pending,{
-      pending:"please wait"
-    })
+
+    if (confirmPassword !== password) {
+      return toast.error("Passwords do not match");
+    }
+
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|-]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return toast.error("Password must be strong");
+    }
+
+    const userData = {
+      name: form.name,
+      email: form.email,
+      password: form.password, // Ensure password is included
+      confirmPassword: form.confirmPassword, // Confirm password if needed
+    };
+
+    const pending = postNewUser(userData); // Submit with all fields
+    toast.promise(pending, { pending: "Please wait..." });
+
     const { status, message } = await pending;
 
     toast[status](message);
 
     status === "success" && setForm(initialState);
   };
+
+
   return (
     <div className="border rounded p-4 m-2">
       <h4 className="mb-5">Sign up Quickly! </h4>
@@ -74,15 +95,19 @@ const SignUpForm = () => {
         {fields.map((input) => (
           <CustomInput key={input.name} {...input} onChange={handleOnChange} />
         ))}
-        <Form.Check label="suscribe to us" />
+        <div className="d-flex justify-content-end">
+          <Form.Check label="suscribe to us" />
+        </div>
         <div className="d-grid mt-2">
           <Button variant="primary" type="submit">
             Submit
           </Button>
         </div>
-        <div className="">
-        <p>Have an account ?</p>
-        <Link to={"/login"}>Logiin Here</Link>
+        <div className="text-center pt-3">
+          Have an account?
+          <Link to={"/login"}>
+            <b className="mx-3">Login Here</b>
+          </Link>
         </div>
       </Form>
     </div>

@@ -75,7 +75,7 @@ const SignInForm = () => {
         <div className="text-center pt-3">
           Dont have an account ? 
           <Link to="/signup">
-          Signup here?</Link>
+          <b className="mx-3">Signup here</b></Link>
         </div>
       </Form>
     </div>
