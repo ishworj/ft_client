@@ -7,7 +7,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = ({ data }) => {
   return (
-    <div className="customChart">
+    <div className="customChart" style={{ maxHeight: "250px" }}>
       <Doughnut data={data} />
     </div>
   );

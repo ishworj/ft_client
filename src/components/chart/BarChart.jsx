@@ -9,16 +9,12 @@ import {
   Legend,
 } from "chart.js";
 
-// Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const BarChart = ({ data }) => {
-
-  // Aggregate income and expense amounts for each date
   const aggregatedData = data.reduce((acc, item) => {
     const date = new Date(item.date).toLocaleDateString();
 
-    // If the date exists, add the amount to the correct type (income or expense)
     if (!acc[date]) {
       acc[date] = { income: 0, expense: 0 };
     }
@@ -32,7 +28,6 @@ const BarChart = ({ data }) => {
     return acc;
   }, {});
 
-  // Prepare the labels (dates) and datasets (amounts)
   const labels = Object.keys(aggregatedData);
   const expenses = labels.map((date) => aggregatedData[date].expense);
   const income = labels.map((date) => aggregatedData[date].income);
@@ -43,14 +38,14 @@ const BarChart = ({ data }) => {
       {
         label: "Expense",
         data: expenses,
-        backgroundColor: "rgba(255, 99, 132, 0.6)", // Red color for expenses
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
         borderColor: "rgba(255, 99, 132, 1)",
         borderWidth: 1,
       },
       {
         label: "Income",
         data: income,
-        backgroundColor: "rgba(75, 192, 192, 0.6)", // Green color for income
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
       },
@@ -66,7 +61,7 @@ const BarChart = ({ data }) => {
       },
       tooltip: {
         callbacks: {
-          label: (tooltipItem) => `$${tooltipItem.raw}`, // Format tooltip to show value with $
+          label: (tooltipItem) => `$${tooltipItem.raw}`,
         },
       },
     },

@@ -1,5 +1,5 @@
 import "./App.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer, toast,Bounce} from "react-toastify";
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -30,7 +30,7 @@ function App() {
           <Route path="login" element={<Login />}></Route>
           <Route path="signup" element={<Signup />}></Route>
           <Route path="contact" element={<Contact />}></Route>
-          <Route index element={<Home/>}></Route>
+          <Route index element={<Home />}></Route>
           <Route
             path="dashboard"
             element={
@@ -49,7 +49,19 @@ function App() {
           ></Route>
         </Route>
       </Routes>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 }

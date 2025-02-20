@@ -13,13 +13,15 @@ const Dashboard = () => {
         <Col>
           {user?.name && (
             <div className="text-warning pb-3">
-              <h3>Welcome {user?.name}</h3>
+              <h3 className="fs-2">
+                Welcome {user?.name?.split(" ")[0] || "Guest"}
+              </h3>
             </div>
           )}
         </Col>
         <Col className="text-center d-flex justify-content-center align-items-center gap-3">
-          <p className="m-0 " >AI Reports</p>
-        <AiSuggestions/>
+          <p className="m-0 ">AI Reports</p>
+          <AiSuggestions />
         </Col>
       </Row>
       <DashboardChart />

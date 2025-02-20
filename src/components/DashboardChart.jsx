@@ -55,26 +55,17 @@ export default function DashboardChart() {
             </Col>
           </Row>
 
-          <Row className="mt-2">
-            <Col
-              md={4}
-              className="bg-dark  p-2 d-flex align-items-center justify-content-center"
-            >
+          <Row className="mt-2 ">
+            <Col className="bg-dark  p-2 d-flex align-items-center justify-content-center ">
               <DoughnutChart data={dashboardData.balance.chartData} />
             </Col>
-            <Col
-              md={4}
-              className="bg-dark  p-2 d-flex align-items-center justify-content-center"
-            >
+            <Col className="bg-dark  p-2 d-flex align-items-center justify-content-center">
               <LineChart
                 data={dashboardData.income.lineData}
                 options={dashboardData.income.options}
               />
             </Col>
-            <Col
-              md={4}
-              className="bg-dark  p-2 d-flex align-items-center justify-content-center"
-            >
+            <Col className="bg-dark  p-2 d-flex align-items-center justify-content-center">
               <LineChart
                 data={dashboardData.expense.lineData}
                 options={dashboardData.expense.options}

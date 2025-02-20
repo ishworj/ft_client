@@ -16,7 +16,7 @@ const SignInForm = () => {
   const { user, setUser } = useUser();
   const [form, setForm] = useState(initialState);
 
-  const goTO = location?.state?.from?.pathname || "/transaction";
+  const goTO = location?.state?.from?.pathname || "/dashboard";
 
   useEffect(() => {
     user?._id && navigate(goTO);

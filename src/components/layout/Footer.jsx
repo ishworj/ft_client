@@ -15,12 +15,12 @@ const Footer = () => {
 
   const handleOnSuscribe = (e)=>{
     e.preventDefault();
-    toast.success("Thnak you for suscribing us 🎉✨")
+    toast.success("Thnak you for suscribing us 🎉✨ , Stay updated for more news and features..")
     setEmail("");
 
   }
   return (
-    <Container fluid className="bg-dark p-5 ">
+    <Container fluid className=" p-5 ">
       <Row className="text-center mb-4">
         <Col md={6}>
           <div>

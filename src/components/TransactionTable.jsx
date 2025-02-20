@@ -4,14 +4,23 @@ import { useUser } from "../context/UserContext";
 import { Form } from "react-bootstrap";
 import { FaPlusCircle } from "react-icons/fa";
 import { Button } from "react-bootstrap";
-import { deleteTransactions } from "../../helpers/axiosHelper";
+import {
+  deleteOneTransaction,
+  deleteTransactions,
+} from "../../helpers/axiosHelper";
 import { toast } from "react-toastify";
+import MessageModal from "./MessageModal";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 const TransactionTable = () => {
   const [displayTran, setDisplayTran] = useState([]);
   const { transactions, toogleModal, getTransactions } = useUser();
   const [idsToDelete, setIdsToDelete] = useState([]);
-  console.log(transactions)
+  const [idToDelete, setIdToDelete] = useState("");
+
+  // for message modal
+  const [show, setShow] = useState(false);
+  const [showSingleDelete, setShowSingleDelete] = useState(false);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +42,7 @@ const TransactionTable = () => {
     });
     setDisplayTran(filteredTransactions);
   };
-  
+
   const handleOnSelect = (e) => {
     const { checked, value } = e.target;
 
@@ -60,18 +69,33 @@ const TransactionTable = () => {
     }
   };
 
+  const handleOnSingleDelete = async () => {
+    setShowSingleDelete(false);
+
+    const pending = deleteOneTransaction(idToDelete);
+
+    toast.promise(pending, {
+      pending: "please wait...",
+    });
+
+    const { status, message } = await pending;
+    toast[status](message);
+    status === "success" && getTransactions() && setIdToDelete("");
+  };
+
   const handleOnDelete = async () => {
-    if (confirm(`Delete ${idsToDelete.length} transactions`)) {
-      const pending = deleteTransactions({ idsToDelete });
+    // if (confirm(`Delete ${idsToDelete.length} transactions`)) {
+    setShow(false);
+    const pending = deleteTransactions({ idsToDelete });
 
-      toast.promise(pending, {
-        pending: "please wait ...",
-      });
+    toast.promise(pending, {
+      pending: "please wait ...",
+    });
 
-      const { status, message } = await pending;
-      toast[status](message);
-      status === "success" && getTransactions() && setIdsToDelete([]);
-    }
+    const { status, message } = await pending;
+    toast[status](message);
+    status === "success" && getTransactions() && setIdsToDelete([]);
+    // }
   };
 
   // Pagination logic
@@ -121,7 +145,7 @@ const TransactionTable = () => {
         )}
       </div>
 
-      <Table className="table table-sm " striped hover>
+      <Table className="table table-sm  text-center" striped hover>
         <thead>
           <tr>
             <th className="text-warning  py-2 ">#</th>
@@ -129,6 +153,7 @@ const TransactionTable = () => {
             <th className="text-warning  py-2 ">Description</th>
             <th className="text-warning  py-2 ">Deposited</th>
             <th className="text-warning  py-2 ">Expense</th>
+            <th className="text-warning  py-2 text-center ">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -156,10 +181,19 @@ const TransactionTable = () => {
                   <td className="out">-${t.amount}</td>
                 </>
               )}
+
+              <td className="text-center text-danger">
+                <RiDeleteBin6Line
+                  onClick={() => {
+                    setShowSingleDelete(true);
+                    setIdToDelete(t._id);
+                  }}
+                />
+              </td>
             </tr>
           ))}
-          <tr className="fw-bold text-center">
-            <td colSpan={3}>Total balance</td>
+          <tr className="fw-bold text-center ">
+            <td colSpan={4}>Total balance</td>
             <td
               colSpan={2}
               className={balance > 0 ? "text-success" : "text-danger"}
@@ -170,11 +204,31 @@ const TransactionTable = () => {
         </tbody>
       </Table>
 
+      <MessageModal
+        show={showSingleDelete}
+        onHide={() => setShowSingleDelete(false)}
+        onDelete={handleOnSingleDelete}
+        message="Are you sure you want to delete this transaction ?"
+      />
+
       {idsToDelete.length > 0 && (
         <div className="d-grid">
-          <Button variant="danger" onClick={handleOnDelete}>
+          <Button
+            variant="danger"
+            onClick={() => {
+              setShow(true);
+            }}
+          >
             Delete {idsToDelete.length}
           </Button>
+          <MessageModal
+            show={show}
+            onHide={() => {
+              setShow(false);
+            }}
+            onDelete={handleOnDelete}
+            message={`Are you sure want to delete ${idsToDelete.length} transactions`}
+          />
         </div>
       )}
 
