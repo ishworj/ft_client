@@ -7,68 +7,45 @@ import axios from "axios";
 import { useUser } from "../context/UserContext";
 
 const AiSuggestions = () => {
-   const placement = window.innerWidth < 768 ? "left" : "bottom";
+  const placement = window.innerWidth < 768 ? "left" : "bottom";
   const { transactions, getTransactions } = useUser();
+  const [suggestions, setSuggestions] = useState("");
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     getTransactions();
   }, []);
 
-  const [suggestions, setSuggestions] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const Data = [
-    { date: "10 feb 2024", income: "500", description: "From lotto" },
-    { date: "12 feb 2024", expense: "400", description: "buy lotto ticket" },
-    { date: "15 feb 2024", income: "500", description: "From work" },
-    { date: "19 feb 2024", income: "1000", description: "From work" },
-    {
-      date: "20 feb 2024",
-      expense: "500",
-      description: "by loto lotto ticket",
-    },
-    { date: "20 feb 2024", expense: "500", description: "education" },
-    { date: "25 feb 2024", expense: "100", description: "buy medicenes" },
-  ];
-
-  const question = `${JSON.stringify(
-    Data
-  )} by analyzing this data, suggest how to be financially stable.`;
+  const filtred = transactions.slice(-10).map((input) => {
+    return {
+      amount: input.amount,
+      description: input.description,
+      type: input.type,
+    };
+  });
 
   const fetchSuggestions = async () => {
-    setLoading(true);
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "system",
-              content: "You are a helpful assistant analyzing financial data.",
-            },
-            {
-              role: "user",
-              content: question,
-            },
-          ],
-          max_tokens: 100,
+      setLoading(true);
+      const response = await axios({
+        method: "post",
+        url: "http://localhost:8080/openai",
+        data: {
+          question:
+            JSON.stringify(filtred) +
+            " anylaze this data and give me financial suggestion how money can be utilized in 4 points in  80 words answer will look like this    <h5>Suggestions</h5> 4* <li>  you can give some colours in tags to make sense to show red flag",
         },
-        {
-          headers: {
-            Authorization: `Bearer lll`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setSuggestions(response.data.choices[0].message.content.trim());
+      });
+
+      if (response.data.content) {
+        setLoading(false);
+        setSuggestions(response.data.content);
+      }
     } catch (error) {
-      console.error("Error fetching AI suggestions:", error);
-      setSuggestions(
-        "This section is under development  :  Sample message  Financial Overview:Income: $200Expenses: $2500Balance: -$50Suggestions:Reduce lotto ticket spending.Focus on essentials like education and health.Save regularly and track expenses."  
- 
-      );
-    } finally {
-      setLoading(false);
+      return {
+        status: "error",
+        message: error?.response?.data?.message || error.message,
+      };
     }
   };
 
@@ -79,17 +56,16 @@ const AiSuggestions = () => {
       placement={placement}
       overlay={
         <Popover id={`popover-positioned-${placement}`}>
-          <Popover.Header as="h3">This Week Report</Popover.Header>
+          <Popover.Header as="h3">Based on recent transactions</Popover.Header>
           <Popover.Body>
             {loading ? (
               <div>Loading suggestions...</div>
             ) : (
-              <div>
-                <p>
-                  <strong>Suggestions:</strong>{" "}
-                  {suggestions || "Click the button to get suggestions."}
-                </p>
-              </div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: suggestions || "click the button to get suggestions",
+                }}
+              ></div>
             )}
           </Popover.Body>
         </Popover>

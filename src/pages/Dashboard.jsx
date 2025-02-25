@@ -20,7 +20,7 @@ const Dashboard = () => {
           )}
         </Col>
         <Col className="text-center d-flex justify-content-center align-items-center gap-3">
-          <p className="m-0 ">AI Reports</p>
+          <p className="m-0 ">AI Financial Advisor</p>
           <AiSuggestions />
         </Col>
       </Row>
