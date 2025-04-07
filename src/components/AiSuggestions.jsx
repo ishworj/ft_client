@@ -29,7 +29,7 @@ const AiSuggestions = () => {
       setLoading(true);
       const response = await axios({
         method: "post",
-        url: "http://localhost:8080/openai",
+        url: "http://finance-tracker-zup3.onrender.com/openai",
         data: {
           question:
             JSON.stringify(filtred) +
